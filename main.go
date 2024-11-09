@@ -87,17 +87,39 @@ func PrintWin(spin [][]string) {
 	}
 }
 
-func main() {
-	symbols := map[string]uint{"cherry": 4, "lemon": 7, "orange": 12, "plum": 13, "bell": 16, "bar": 20}
+func checkWin(spin [][]string, multipliers map[string]uint) []uint {
+	line := []uint{}
 
-	// multipliers := map[string]uint{
-	// 	"cherry": 20,
-	// 	"lemon": 15,
-	// 	"orange": 10,
-	// 	"plum": 5,
-	// 	"bell": 2,
-	// 	"bar": 1,
-	// }
+	for _, row := range spin {
+		win := true
+		checkSymbol := row[0]
+		for _, symbol := range row[1:] {
+			if symbol != checkSymbol {
+				win = false
+				break
+			}
+		}
+		if win {
+			line = append(line, multipliers[checkSymbol])
+		} else {
+			line = append(line, 0)
+		}
+
+	}
+	return line
+}
+
+func main() {
+	symbols := map[string]uint{"cherry": 6, "lemon": 9, "orange": 10, "plum": 10, "bell": 10, "bar": 15}
+
+	multipliers := map[string]uint{
+		"cherry": 20,
+		"lemon":  15,
+		"orange": 10,
+		"plum":   5,
+		"bell":   2,
+		"bar":    1,
+	}
 
 	symbolArr := GenerateSymbolArray(symbols)
 
@@ -111,10 +133,20 @@ func main() {
 		balance -= bet
 		spin := getSpin(symbolArr, 3, 3)
 		PrintWin(spin)
+		// Check if win
+		winLines := checkWin(spin, multipliers)
+
+		for i, multi := range winLines {
+			win := multi * bet
+			balance += win
+			if multi > 0 {
+				fmt.Printf("WON $%d, (%dx) on line %d! 🎊\n", win, multi, i+1)
+			}
+
+		}
+
 	}
 
 	fmt.Printf("you left with $%d.\n", balance)
-	//fmt.Println("Bet: ", bet)
-	//name := getName()
 
 }
