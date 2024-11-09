@@ -126,7 +126,9 @@ func main() {
 	balance := uint(200)
 
 	for balance > 0 {
+
 		bet := getBet(balance)
+		fmt.Printf("\n\n")
 		if bet == 0 {
 			break
 		}
@@ -144,6 +146,7 @@ func main() {
 			}
 
 		}
+		fmt.Printf("\n\n")
 
 	}
 
